@@ -2,103 +2,131 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Happy Birthday Meghna ?</title>
+<title>Happy Birthday Meghna 💖</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
 
 <style>
 body {
     margin: 0;
-    padding: 0;
+    font-family: 'Poppins', sans-serif;
     text-align: center;
-    font-family: 'Arial', sans-serif;
-    background: linear-gradient(to right, #ff758c, #ff7eb3);
+    background: linear-gradient(135deg, #ff758c, #ff7eb3);
     color: white;
     overflow: hidden;
 }
 
-.container {
+/* Glow Title */
+h1 {
     margin-top: 80px;
+    font-size: 3em;
+    animation: glow 2s infinite alternate;
 }
 
-h1 {
-    font-size: 3em;
+@keyframes glow {
+    from { text-shadow: 0 0 10px white; }
+    to { text-shadow: 0 0 30px white; }
 }
 
 h2 {
-    font-size: 2em;
+    font-weight: 300;
 }
 
+/* Button */
 button {
-    padding: 15px 25px;
+    margin-top: 30px;
+    padding: 15px 30px;
     font-size: 18px;
     border: none;
+    border-radius: 30px;
     background: white;
     color: #ff4b2b;
-    border-radius: 25px;
     cursor: pointer;
+    transition: 0.3s;
 }
 
+button:hover {
+    transform: scale(1.1);
+}
+
+/* Message typing */
 #message {
     margin-top: 30px;
     font-size: 22px;
-    display: none;
-    line-height: 1.5;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    border-right: 2px solid white;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
+/* Floating image */
 img {
-    margin-top: 20px;
     width: 220px;
-    border-radius: 15px;
+    margin-top: 30px;
+    border-radius: 20px;
+    animation: float 3s ease-in-out infinite;
     display: none;
+}
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+    100% { transform: translateY(0px); }
 }
 
 /* Confetti */
 .confetti {
     position: fixed;
-    width: 10px;
-    height: 10px;
+    width: 8px;
+    height: 8px;
     background: white;
     top: 0;
-    animation: fall 3s linear infinite;
+    animation: fall linear infinite;
 }
 
 @keyframes fall {
-    to {
-        transform: translateY(100vh);
-    }
+    to { transform: translateY(100vh); }
 }
 </style>
 </head>
 
 <body>
 
-<div class="container">
-    <h1>? Happy Birthday ?</h1>
-    <h2>Meghna ?</h2>
+<h1>🎉 Happy Birthday 🎉</h1>
+<h2>Meghna 💖</h2>
 
-    <button onclick="showSurprise()">Click for Surprise ?</button>
+<button onclick="startSurprise()">Open Your Gift 🎁</button>
 
-    <p id="message">
-        ? Happy Birthday Meghna! ? <br><br>
-        You are truly someone special ? <br>
-        May your life be filled with happiness, success, and beautiful moments ? <br><br>
-        Keep smiling always ?
-    </p>
+<p id="message"></p>
 
-    <img id="photo" src="https://i.imgur.com/4M7IWwP.png">
-</div>
+<img id="photo" src="https://i.imgur.com/4M7IWwP.png">
 
 <audio id="music" src="https://www.fesliyanstudios.com/play-mp3/387"></audio>
 
 <script>
-function showSurprise() {
-    document.getElementById("message").style.display = "block";
+const text = "🥳 Happy Birthday Meghna! 💖 You are truly special... May your life be filled with happiness, success, and endless smiles 😊✨";
+
+let i = 0;
+
+function typeEffect() {
+    if (i < text.length) {
+        document.getElementById("message").innerHTML += text.charAt(i);
+        i++;
+        setTimeout(typeEffect, 50);
+    }
+}
+
+function startSurprise() {
     document.getElementById("photo").style.display = "block";
     document.getElementById("music").play();
+    typeEffect();
     startConfetti();
 }
 
 function startConfetti() {
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 80; i++) {
         let confetti = document.createElement("div");
         confetti.classList.add("confetti");
         confetti.style.left = Math.random() * 100 + "vw";
