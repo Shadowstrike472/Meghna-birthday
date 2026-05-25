@@ -4,42 +4,79 @@
 <meta charset="UTF-8">
 <title>For Meghna 💖</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
 <style>
 body {
     margin: 0;
+    font-family: 'Poppins', sans-serif;
     text-align: center;
-    font-family: Arial;
-    background: linear-gradient(to right, #ff758c, #ff7eb3);
+    background: linear-gradient(135deg, #ff758c, #ff7eb3);
     color: white;
+    overflow: hidden;
 }
 
-/* Hide all sections initially */
 .section {
     display: none;
     margin-top: 100px;
 }
 
-img {
-    width: 200px;
-    cursor: pointer;
+/* Gift Animation */
+.gift {
+    width: 150px;
+    transition: 0.5s;
+}
+.gift:hover {
+    transform: scale(1.1) rotate(5deg);
+}
+
+/* Envelope Animation */
+.envelope {
+    width: 150px;
+    transition: 0.5s;
+}
+.envelope:hover {
+    transform: scale(1.1);
+}
+
+/* Typing effect */
+#letterText {
+    width: 80%;
+    margin: auto;
+    font-size: 20px;
+    border-right: 2px solid white;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 /* Button */
 button {
     padding: 12px 25px;
-    font-size: 16px;
+    border-radius: 25px;
     border: none;
-    border-radius: 20px;
     background: white;
     color: #ff4b2b;
+    font-size: 16px;
     cursor: pointer;
-    margin-top: 20px;
 }
 
 /* Slideshow */
-.slideshow img {
+#slide {
     width: 250px;
     border-radius: 15px;
+}
+
+/* Confetti */
+.confetti {
+    position: fixed;
+    width: 8px;
+    height: 8px;
+    background: white;
+    top: 0;
+    animation: fall linear infinite;
+}
+@keyframes fall {
+    to { transform: translateY(100vh); }
 }
 </style>
 
@@ -47,35 +84,30 @@ button {
 
 <body>
 
-<!-- 🎁 Gift Box -->
+<!-- 🎁 Gift -->
 <div id="gift" class="section" style="display:block;">
     <h1>🎁 Tap to open your gift</h1>
-    <img src="https://cdn-icons-png.flaticon.com/512/869/869636.png" onclick="openGift()">
+    <img class="gift" src="https://cdn-icons-png.flaticon.com/512/869/869636.png" onclick="openGift()">
 </div>
 
 <!-- ✉️ Envelope -->
 <div id="envelope" class="section">
     <h1>💌 Tap to open</h1>
-    <img src="https://cdn-icons-png.flaticon.com/512/561/561127.png" onclick="openLetter()">
+    <img class="envelope" src="https://cdn-icons-png.flaticon.com/512/561/561127.png" onclick="openEnvelope()">
 </div>
 
 <!-- 💖 Letter -->
 <div id="letter" class="section">
     <h2>💖 Dear Meghna,</h2>
-    <p>
-        Happy Birthday! 🥳 <br><br>
-        You are truly someone special in my life ✨ <br>
-        May your days be filled with happiness, laughter, and success 💫 <br><br>
-        Keep smiling always 😊💖
-    </p>
+    <p id="letterText"></p>
     <button onclick="goToQuestion()">Continue ➡️</button>
 </div>
 
 <!-- ❓ Question -->
 <div id="question" class="section">
-    <h2>By what name do I call you most often? 😏</h2>
-    <input type="text" id="answer" placeholder="Type your answer">
-    <br>
+    <h2>What name do I call you most often? 😏</h2>
+    <input type="text" id="answer">
+    <br><br>
     <button onclick="checkAnswer()">Submit</button>
     <p id="result"></p>
 </div>
@@ -83,22 +115,39 @@ button {
 <!-- 📸 Slideshow -->
 <div id="slideshow" class="section">
     <h2>💖 Our Memories 💖</h2>
-    <div class="slideshow">
-        <img id="slide" src="photo1.jpg">
-    </div>
+    <img id="slide" src="photo1.jpg">
 </div>
 
+<audio id="music" src="https://www.fesliyanstudios.com/play-mp3/387"></audio>
+
 <script>
+
+/* Navigation */
 function openGift() {
     document.getElementById("gift").style.display = "none";
     document.getElementById("envelope").style.display = "block";
 }
 
-function openLetter() {
+function openEnvelope() {
     document.getElementById("envelope").style.display = "none";
     document.getElementById("letter").style.display = "block";
+    typeLetter();
+    document.getElementById("music").play();
 }
 
+/* Typing effect */
+const text = "Happy Birthday Meghna 💖 You are truly special in my life... May your life be filled with happiness, success, and endless smiles 😊✨";
+let i = 0;
+
+function typeLetter() {
+    if (i < text.length) {
+        document.getElementById("letterText").innerHTML += text.charAt(i);
+        i++;
+        setTimeout(typeLetter, 40);
+    }
+}
+
+/* Question */
 function goToQuestion() {
     document.getElementById("letter").style.display = "none";
     document.getElementById("question").style.display = "block";
@@ -106,10 +155,11 @@ function goToQuestion() {
 
 function checkAnswer() {
     let ans = document.getElementById("answer").value.toLowerCase();
-    
+
     if (ans === "rowdy") {
         document.getElementById("question").style.display = "none";
         document.getElementById("slideshow").style.display = "block";
+        startConfetti();
         startSlideshow();
     } else {
         document.getElementById("result").innerHTML = "❌ Try again 😜";
@@ -118,14 +168,26 @@ function checkAnswer() {
 
 /* Slideshow */
 let images = ["photo1.jpg", "photo2.jpg", "photo3.jpg"];
-let i = 0;
+let index = 0;
 
 function startSlideshow() {
     setInterval(() => {
-        i = (i + 1) % images.length;
-        document.getElementById("slide").src = images[i];
+        index = (index + 1) % images.length;
+        document.getElementById("slide").src = images[index];
     }, 2000);
 }
+
+/* Confetti */
+function startConfetti() {
+    for (let i = 0; i < 100; i++) {
+        let confetti = document.createElement("div");
+        confetti.classList.add("confetti");
+        confetti.style.left = Math.random() * 100 + "vw";
+        confetti.style.animationDuration = (Math.random() * 3 + 2) + "s";
+        document.body.appendChild(confetti);
+    }
+}
+
 </script>
 
 </body>
