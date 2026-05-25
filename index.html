@@ -4,79 +4,85 @@
 <meta charset="UTF-8">
 <title>For Meghna 💖</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 body {
     margin: 0;
     font-family: 'Poppins', sans-serif;
-    text-align: center;
-    background: linear-gradient(135deg, #ff758c, #ff7eb3);
+    background: #0f0c29;
     color: white;
+    text-align: center;
     overflow: hidden;
 }
 
+/* Smooth sections */
 .section {
-    display: none;
-    margin-top: 100px;
+    position: absolute;
+    width: 100%;
+    top: 20%;
+    opacity: 0;
+    transform: scale(0.9);
+    transition: 0.5s ease;
+}
+.active {
+    opacity: 1;
+    transform: scale(1);
 }
 
-/* Gift Animation */
+/* Gift */
 .gift {
-    width: 150px;
-    transition: 0.5s;
+    font-size: 80px;
+    cursor: pointer;
+    transition: 0.3s;
 }
 .gift:hover {
-    transform: scale(1.1) rotate(5deg);
+    transform: scale(1.2) rotate(10deg);
 }
 
-/* Envelope Animation */
+/* Envelope */
 .envelope {
-    width: 150px;
-    transition: 0.5s;
+    font-size: 80px;
+    cursor: pointer;
+    transition: 0.3s;
 }
 .envelope:hover {
-    transform: scale(1.1);
+    transform: scale(1.2);
 }
 
-/* Typing effect */
+/* Letter */
 #letterText {
     width: 80%;
     margin: auto;
-    font-size: 20px;
-    border-right: 2px solid white;
-    white-space: nowrap;
-    overflow: hidden;
+    font-size: 18px;
+    line-height: 1.5;
 }
 
 /* Button */
 button {
+    margin-top: 20px;
     padding: 12px 25px;
     border-radius: 25px;
     border: none;
     background: white;
     color: #ff4b2b;
     font-size: 16px;
-    cursor: pointer;
 }
 
 /* Slideshow */
 #slide {
-    width: 250px;
+    width: 85%;
+    max-width: 300px;
     border-radius: 15px;
 }
 
-/* Confetti */
-.confetti {
+/* Hearts */
+.heart {
     position: fixed;
-    width: 8px;
-    height: 8px;
-    background: white;
-    top: 0;
-    animation: fall linear infinite;
+    animation: float 4s linear infinite;
 }
-@keyframes fall {
-    to { transform: translateY(100vh); }
+@keyframes float {
+    to { transform: translateY(-100vh); }
 }
 </style>
 
@@ -85,36 +91,36 @@ button {
 <body>
 
 <!-- 🎁 Gift -->
-<div id="gift" class="section" style="display:block;">
-    <h1>🎁 Tap to open your gift</h1>
-    <img class="gift" src="https://cdn-icons-png.flaticon.com/512/869/869636.png" onclick="openGift()">
+<div id="gift" class="section active">
+    <h2>Tap your gift 🎁</h2>
+    <div class="gift" onclick="next('gift','envelope')">🎁</div>
 </div>
 
-<!-- ✉️ Envelope -->
+<!-- 💌 Envelope -->
 <div id="envelope" class="section">
-    <h1>💌 Tap to open</h1>
-    <img class="envelope" src="https://cdn-icons-png.flaticon.com/512/561/561127.png" onclick="openEnvelope()">
+    <h2>Open the letter 💌</h2>
+    <div class="envelope" onclick="openLetter()">💌</div>
 </div>
 
 <!-- 💖 Letter -->
 <div id="letter" class="section">
-    <h2>💖 Dear Meghna,</h2>
+    <h2>Dear Meghna 💖</h2>
     <p id="letterText"></p>
-    <button onclick="goToQuestion()">Continue ➡️</button>
+    <button onclick="next('letter','question')">Continue ➡️</button>
 </div>
 
 <!-- ❓ Question -->
 <div id="question" class="section">
-    <h2>What name do I call you most often? 😏</h2>
-    <input type="text" id="answer">
+    <h3>What name do I call you most often? 😏</h3>
+    <input id="answer">
     <br><br>
-    <button onclick="checkAnswer()">Submit</button>
+    <button onclick="check()">Submit</button>
     <p id="result"></p>
 </div>
 
 <!-- 📸 Slideshow -->
 <div id="slideshow" class="section">
-    <h2>💖 Our Memories 💖</h2>
+    <h2>Our Memories 💖</h2>
     <img id="slide" src="photo1.jpg">
 </div>
 
@@ -122,69 +128,64 @@ button {
 
 <script>
 
-/* Navigation */
-function openGift() {
-    document.getElementById("gift").style.display = "none";
-    document.getElementById("envelope").style.display = "block";
+/* Smooth transition */
+function next(current, next) {
+    document.getElementById(current).classList.remove("active");
+    setTimeout(() => {
+        document.getElementById(next).classList.add("active");
+    }, 300);
 }
 
-function openEnvelope() {
-    document.getElementById("envelope").style.display = "none";
-    document.getElementById("letter").style.display = "block";
-    typeLetter();
-    document.getElementById("music").play();
-}
-
-/* Typing effect */
-const text = "Happy Birthday Meghna 💖 You are truly special in my life... May your life be filled with happiness, success, and endless smiles 😊✨";
+/* Letter typing */
+const text = "Happy Birthday Meghna 💖 You are truly special... Stay happy always 😊✨";
 let i = 0;
 
-function typeLetter() {
+function openLetter() {
+    next('envelope','letter');
+    document.getElementById("music").play();
+    type();
+}
+
+function type() {
     if (i < text.length) {
-        document.getElementById("letterText").innerHTML += text.charAt(i);
+        document.getElementById("letterText").innerHTML += text[i];
         i++;
-        setTimeout(typeLetter, 40);
+        setTimeout(type, 40);
     }
 }
 
 /* Question */
-function goToQuestion() {
-    document.getElementById("letter").style.display = "none";
-    document.getElementById("question").style.display = "block";
-}
-
-function checkAnswer() {
+function check() {
     let ans = document.getElementById("answer").value.toLowerCase();
-
     if (ans === "rowdy") {
-        document.getElementById("question").style.display = "none";
-        document.getElementById("slideshow").style.display = "block";
-        startConfetti();
-        startSlideshow();
+        next('question','slideshow');
+        startSlide();
+        hearts();
     } else {
-        document.getElementById("result").innerHTML = "❌ Try again 😜";
+        document.getElementById("result").innerHTML = "Try again 😜";
     }
 }
 
 /* Slideshow */
-let images = ["photo1.jpg", "photo2.jpg", "photo3.jpg"];
+let imgs = ["photo1.jpg","photo2.jpg","photo3.jpg"];
 let index = 0;
 
-function startSlideshow() {
-    setInterval(() => {
-        index = (index + 1) % images.length;
-        document.getElementById("slide").src = images[index];
-    }, 2000);
+function startSlide() {
+    setInterval(()=>{
+        index = (index+1)%imgs.length;
+        document.getElementById("slide").src = imgs[index];
+    },2000);
 }
 
-/* Confetti */
-function startConfetti() {
-    for (let i = 0; i < 100; i++) {
-        let confetti = document.createElement("div");
-        confetti.classList.add("confetti");
-        confetti.style.left = Math.random() * 100 + "vw";
-        confetti.style.animationDuration = (Math.random() * 3 + 2) + "s";
-        document.body.appendChild(confetti);
+/* Hearts */
+function hearts() {
+    for(let i=0;i<30;i++){
+        let h=document.createElement("div");
+        h.innerHTML="💖";
+        h.className="heart";
+        h.style.left=Math.random()*100+"vw";
+        h.style.fontSize=(20+Math.random()*20)+"px";
+        document.body.appendChild(h);
     }
 }
 
